@@ -1,0 +1,4 @@
+node_modules/
+cloud-functions/_shared/
+.dev.vars
+.env

@@ -1,0 +1,41 @@
+name: Build EdgeOne Makers adapter
+on:
+  pull_request:
+    paths:
+      - 'edgeone/**'
+      - 'cloudflare/src/**'
+      - 'backend/src/**'
+      - '.github/workflows/edgeone-build.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'edgeone/**'
+      - 'cloudflare/src/**'
+      - 'backend/src/**'
+      - '.github/workflows/edgeone-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        working-directory: edgeone
+        run: npm install --no-audit --no-fund
+      - name: Unit tests
+        working-directory: edgeone
+        run: npm test
+      - name: Build Node Functions
+        working-directory: edgeone
+        run: npm run build
+      - name: Validate Makers Node Functions with official CLI
+        working-directory: edgeone
+        run: npm exec --yes --package=edgeone@1.7.2 -- edgeone makers build
+      - name: Validate output
+        run: |
+          test -s edgeone/cloud-functions/_shared/app.mjs
+          test -f edgeone/cloud-functions/[[default]].js
+          node --check edgeone/cloud-functions/_shared/app.mjs

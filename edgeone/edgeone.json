@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
+  "nodeVersion": "22.11.0",
+  "cloudFunctions": {
+    "maxDuration": 60
+  },
+  "installCommand": "npm install"
+}
