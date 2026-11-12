@@ -1,0 +1,5 @@
+node_modules/
+dist/
+src/vendor/quickjs.wasm
+.dev.vars
+.env

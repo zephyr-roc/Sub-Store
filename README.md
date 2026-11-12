@@ -202,3 +202,9 @@ This project is under the AGPL-3.0 LICENSE.
 ## 致谢
 
 感谢赞助商 [ForZTN](https://sponsorship.forztn.com/github/sub-store-org/Sub-Store) 对项目服务器的支持，感谢。
+
+## Cloudflare Workers adapter (fork)
+
+This fork adds a Cloudflare Workers + SQLite Durable Objects backend in [`cloudflare/`](cloudflare/README.md).
+It reuses the full Sub-Store management/conversion code while keeping the frontend separately hosted.
+Configure the authentication secret before deploying. Build instructions are in the adapter README.
