@@ -31,6 +31,10 @@ jobs:
       - name: Build Node Functions
         working-directory: edgeone
         run: npm run build
+      - name: Validate Makers Node Functions with official CLI
+        working-directory: edgeone
+        continue-on-error: true
+        run: npm exec --yes --package=edgeone@1.7.2 -- edgeone makers build
       - name: Validate output
         run: |
           test -s edgeone/cloud-functions/_shared/app.mjs
