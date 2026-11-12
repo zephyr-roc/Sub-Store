@@ -1,0 +1,34 @@
+name: Build Cloudflare Workers adapter
+on:
+  pull_request:
+    paths:
+      - 'cloudflare/**'
+      - 'backend/src/**'
+      - '.github/workflows/cloudflare-build.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'cloudflare/**'
+      - 'backend/src/**'
+      - '.github/workflows/cloudflare-build.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        working-directory: cloudflare
+        run: npm install --no-audit --no-fund
+      - name: Compile Sub-Store for Workers
+        working-directory: cloudflare
+        run: npm run build
+      - name: Validate output
+        run: |
+          test -s cloudflare/dist/worker.js
+          test -s cloudflare/dist/quickjs.wasm
+      - name: Wrangler dry run
+        working-directory: cloudflare
+        run: npx wrangler deploy --dry-run --outdir dist/check
