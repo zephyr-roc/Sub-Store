@@ -42,6 +42,24 @@ https://sub-store-cf.<account>.workers.dev/<your-random-secret>
 安装命令 `npm install`，构建命令 `npm run build`，部署命令 `npx wrangler deploy`。
 先在 Worker 配置 Secret，并确认 `wrangler.toml` 的 `name` 与 Cloudflare Worker 名称一致。
 
+## 验证
+
+在部署成功后，打开管理状态接口（将域名及口令替换成自己的）：
+
+```bash
+curl -i 'https://sub-store-cf.<account>.workers.dev/<your-secret>/api/utils/worker-status'
+```
+
+预期返回 `status: success` 且 `data.storage.bound: true`。
+然后在前端建立一条测试订阅、刷新页面、重新访问并确认保存；
+再创建分享令牌，验证 `/share/...` 的有效令牌能访问、无令牌无法访问。
+匿名访问 `/api/subs` 和 `/download/...` 必须返回 401。
+
+**资源限制**：Cloudflare Workers Free 每次请求只有 10ms CPU 时间上限，
+复杂订阅解析或 QuickJS 脚本可能超限。适合轻量个人用途；
+若报 1102，应考虑 Workers Paid 或 Node / Docker 部署。
+这不是功能等价的无条件保证。
+
 ## 目录
 
 - `src/worker.js`：Workers 入口、鉴权失败关闭、定时任务转发、SQLite Durable Object 串行化
