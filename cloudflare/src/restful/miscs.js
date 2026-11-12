@@ -90,6 +90,7 @@ export default function register($app) {
                 $.write(JSON.stringify(content, null, `  `), '#sub-store');
                 if (($.env.isNode || $.env.isWorker)) {
                     $.cache = content;
+                    $._dirty = true;
                     await $.persistCache();
                 }
                 migrate();
@@ -446,6 +447,7 @@ async function gistBackupAction(
             $.write(JSON.stringify(content, null, `  `), '#sub-store');
             if (($.env.isNode || $.env.isWorker)) {
                 $.cache = content;
+                $._dirty = true;
                 await $.persistCache();
             }
             $.info(`perform migration after restoring from gist...`);
