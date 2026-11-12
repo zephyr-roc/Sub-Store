@@ -1,3 +1,4 @@
+import { parseRequestBody } from './request-body';
 /** Sub-Store Workers Express 适配层 */
 
 import { ENV } from './open-api';
@@ -70,23 +71,27 @@ export default function express({ substore: $ }) {
             query[key] = value;
         });
 
-        // 解析请求体
-        let body = null;
-        if (!['GET', 'HEAD'].includes(method)) {
-            const contentType = request.headers.get('content-type') || '';
-            if (contentType.includes('json')) {
-                try {
-                    body = await request.json();
-                } catch (e) {
-                    body = null;
-                }
-            } else {
-                try {
-                    body = await request.text();
-                } catch (e) {
-                    body = null;
-                }
-            }
+        // Preserve the full JSON body on PATCH settings requests. A malformed
+        // request must not silently turn into null and overwrite stored data.
+        let body;
+        try {
+            body = await parseRequestBody(request);
+        } catch (error) {
+            return new Response(JSON.stringify({
+                status: 'failed',
+                error: {
+                    code: 'INVALID_REQUEST_BODY',
+                    type: 'RequestInvalidError',
+                    message: error.message,
+                },
+            }), {
+                status: 400,
+                headers: {
+                    ...DEFAULT_HEADERS,
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Cache-Control': 'no-store',
+                },
+            });
         }
 
         // 转换请求头
