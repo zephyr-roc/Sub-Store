@@ -151,6 +151,22 @@ describe('settings routes', function () {
             };
         }
 
+        for (const [label, body] of [
+            ['missing body', undefined],
+            ['null body', null],
+            ['JSON null represented as null', null],
+            ['array body', []],
+            ['string body', '{"gistUpload":"age"}'],
+        ]) {
+            it(`rejects ${label} without overwriting existing settings`, async function () {
+                const existingSettings = { existing: 'preserved' };
+                const { res, settings } = await patchSettings(existingSettings, body);
+                expect(res.statusCode).to.equal(400);
+                expect(res.body.error.code).to.equal('INVALID_SETTINGS_PAYLOAD');
+                expect(settings).to.deep.equal(existingSettings);
+            });
+        }
+
         it('trims GitHub credentials before saving and refreshing the artifact store', async function () {
             let authorization;
             Gist.prototype.locate = async function () {

@@ -34,7 +34,7 @@ function hasOwn(object, key) {
 
 function shouldValidateGistAgeSecretKey(settings, body = {}) {
     return (
-        body.gistUpload === 'age' ||
+        body?.gistUpload === 'age' ||
         (settings?.gistUpload === 'age' &&
             hasOwn(body, AGE_SECRET_KEY))
     );
@@ -100,6 +100,13 @@ async function getSettings(req, res) {
 
 async function updateSettings(req, res) {
     try {
+        // Never treat an absent or malformed request body as an empty patch.
+        if (!isPlainObject(req.body)) {
+            throw new RequestInvalidError(
+                'INVALID_SETTINGS_PAYLOAD',
+                'Settings update requires a JSON object body',
+            );
+        }
         const settings = $.read(SETTINGS_KEY) || {};
         const newSettings = {
             ...settings,
@@ -207,6 +214,7 @@ async function updateSettings(req, res) {
                       `Failed to update settings`,
                       `Reason: ${e.message ?? e}`,
                   ),
+            e instanceof RequestInvalidError ? 400 : 500,
         );
     }
 }
