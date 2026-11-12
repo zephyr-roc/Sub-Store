@@ -1,3 +1,4 @@
+import { rewriteRequestUrl } from './utils/rewrite-request-url.js';
 /** Sub-Store Workers 入口 */
 
 import { version as workersVersion } from '../package.json';
@@ -160,7 +161,7 @@ export default {
                     if (pathname.startsWith('/api/')) {
                         newUrl.searchParams.set('share', 'true');
                     }
-                    request = new Request(newUrl.toString(), request);
+                    request = await rewriteRequestUrl(request, newUrl.toString());
                 }
             }
 
@@ -200,7 +201,7 @@ export default {
                         const fakeUrl = new URL(request.url);
                         fakeUrl.pathname = pathname.replace(/\/share\/.*?\//, '/share/sub/');
                         fakeUrl.searchParams.set('_fakeNode', 'true');
-                        request = new Request(fakeUrl.toString(), request);
+                        request = await rewriteRequestUrl(request, fakeUrl.toString());
                     } else {
                         return jsonFailure(404, 'Invalid or expired share token');
                     }

@@ -18,7 +18,16 @@ export async function parseRequestBody(request) {
         try {
             return JSON.parse(raw);
         } catch {
-            throw new SyntaxError('Invalid JSON request body');
+            // Report metadata only; settings payloads may contain private tokens.
+            const trimmed = raw.trim();
+            const error = new SyntaxError('Invalid JSON request body');
+            error.bodyDiagnostics = {
+                receivedCharacters: raw.length,
+                contentType: contentType.split(';', 1)[0],
+                startsWithJsonDelimiter: /^[{\\[]/.test(trimmed),
+                bodyUsed: request.bodyUsed === true,
+            };
+            throw error;
         }
     }
     return raw;
