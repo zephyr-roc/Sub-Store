@@ -58,8 +58,8 @@ https://sub-store-cf.<account>.workers.dev/<your-random-secret>
 - 订阅源 HTTP 请求来自 Cloudflare 边缘网络；部分站点可能拒绝访问或限制响应体大小。
 - 单一 Durable Object 串行处理 API；非常耗时的转换可能阻塞其他管理请求。
 - 入口没有集成官方 UI 的静态资源；根路径跳转到官方 UI。
-- 管理 API 必须有口令路径；已发布的分享/下载链接按原 Sub-Store 分享逻辑提供，
-  **有权访问这些链接的人可以获取对应的订阅凭据**。
+- 管理 API 必须有口令路径；分享链接需要有效分享令牌；不带鉴权前缀的普通 `/download/` 路径被拒绝。
+  **有权访问分享链接的人可以获取对应的订阅凭据**。
 - 默认每天 15:55 UTC 触发一次 Gist 同步；需在 Sub-Store 设置里正确配置凭据。
 - 需要在 Cloudflare 上真实验证首轮写入、重新访问、重启后读取、分享令牌、Cron 和 QuickJS。
   GitHub CI 的构建成功并不意味着云端所有功能都已验证。

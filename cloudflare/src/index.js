@@ -130,7 +130,7 @@ export default {
             const backendPath = normalizeBackendPath(
                 env.SUB_STORE_FRONTEND_BACKEND_PATH,
             );
-            const isPublicPath = /^\/(api\/download|api\/preview|api\/sub\/flow)/.test(pathname);
+            const isPublicPath = false; // Management APIs require the secret prefix.
             const isManagementApi = !isPublicPath && pathname.startsWith('/api/');
             const isAuthDisabledManagementApi = !backendPath && isManagementApi;
             if (isAuthDisabledManagementApi) {

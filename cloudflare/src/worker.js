@@ -63,6 +63,11 @@ export default {
         if (!normalizeBackendPath(env.SUB_STORE_FRONTEND_BACKEND_PATH)) {
             return failClosed();
         }
+        // Only token-verified /share routes are public; raw download endpoints
+        // would otherwise disclose subscription contents to anyone who knows a name.
+        if (/^\/download(?:\/|$)/.test(path)) {
+            return new Response('Unauthorized', { status: 401 });
+        }
         if (path === '/') {
             return Response.redirect('https://sub-store.vercel.app/', 302);
         }
