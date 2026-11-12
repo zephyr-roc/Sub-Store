@@ -78,7 +78,7 @@ npm test
 npm run build
 ```
 
-仅 `npm run build` 成功不代表已在 EdgeOne 云端通过二次打包和实际 Blob 认证。
+CI 也会运行 `edgeone makers build` 校验 EdgeOne Node Functions 二次打包；但仍不代表已在 EdgeOne 云端完成实际 Blob 认证与读写。
 部署后务必检查：
 1. `/api/subs` 未带密钥时为 401；
 2. `/<secret>/api/subs` 能正常返回；

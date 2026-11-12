@@ -3,8 +3,7 @@
   "outputDirectory": "public",
   "nodeVersion": "22.11.0",
   "cloudFunctions": {
-    "nodejs": {
-      "maxDuration": 60
-    }
-  }
+    "maxDuration": 60
+  },
+  "installCommand": "npm install"
 }

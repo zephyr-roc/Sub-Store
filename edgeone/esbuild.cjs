@@ -377,7 +377,7 @@ const inlineWasmPlugin = {
     });
 
     const stats = fs.statSync(path.join(__dirname, 'cloud-functions', '_shared', 'app.mjs'));
-    console.log(`\nOutput: dist/worker.js (${(stats.size / 1024).toFixed(1)} KB)`);
+    console.log(`\nOutput: cloud-functions/_shared/app.mjs (${(stats.size / 1024).toFixed(1)} KB)`);
     console.log('Build complete!');
 })().catch((e) => {
     console.error('Build failed:', e);
