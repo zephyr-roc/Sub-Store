@@ -88,3 +88,14 @@ CI 也会运行 `edgeone makers build` 校验 EdgeOne Node Functions 二次打�
 
 源项目使用 AGPL-3.0，Cloudflare 兼容层参考
 [Yu9191/sub-store-workers](https://github.com/Yu9191/sub-store-workers)。
+
+## JSON 请求体故障诊断
+
+如果前端 PATCH 设置时遇到 `INVALID_REQUEST_BODY`，适配层会返回仅包含
+请求体长度、Content-Type 与 JSON 结构标记的 `diagnostics`，**不会返回、
+记录或打印设置的具体内容**。可通过这些字段判断 EdgeOne Node Functions
+是否改变了浏览器发送的请求体。
+
+新版本在内部路径改写时显式复制 Body 字节，不再将 Makers 的 Request
+对象直接作为另一个 Request 的初始化参数。若仍出错，提供不含
+Token 的错误 JSON 和对应请求的响应状态即可继续诊断。

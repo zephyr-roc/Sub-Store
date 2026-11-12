@@ -83,6 +83,7 @@ export default function express({ substore: $ }) {
                     code: 'INVALID_REQUEST_BODY',
                     type: 'RequestInvalidError',
                     message: error.message,
+                    ...(error.bodyDiagnostics ? { diagnostics: error.bodyDiagnostics } : {}),
                 },
             }), {
                 status: 400,
