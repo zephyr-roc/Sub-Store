@@ -22,6 +22,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install backend dependencies
+        working-directory: backend
+        run: |
+          corepack enable
+          pnpm install --no-frozen-lockfile
+      - name: Test settings route regression
+        working-directory: backend
+        run: pnpm exec mocha src/test/restful/settings.spec.js --require @babel/register
       - name: Install dependencies
         working-directory: edgeone
         run: npm install --no-audit --no-fund
