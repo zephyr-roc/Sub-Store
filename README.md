@@ -208,3 +208,7 @@ This project is under the AGPL-3.0 LICENSE.
 This fork adds a Cloudflare Workers + SQLite Durable Objects backend in [`cloudflare/`](cloudflare/README.md).
 It reuses the full Sub-Store management/conversion code while keeping the frontend separately hosted.
 Configure the authentication secret before deploying. Build instructions are in the adapter README.
+
+## EdgeOne Makers backend (fork)
+
+This fork also contains an [EdgeOne Makers Node Functions + Blob adapter](edgeone/README.md). It uses the existing Sub-Store management backend and the official separate UI, and is designed for single-user, low-concurrency deployment.
