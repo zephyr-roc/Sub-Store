@@ -338,7 +338,7 @@ const nodeStubPlugin = {
 const inlineWasmPlugin = {
     name: 'inline-quickjs-wasm',
     setup(build) {
-        build.onLoad({ filter: /quickjs\\.wasm$/ }, (args) => {
+        build.onLoad({ filter: /\.wasm$/ }, (args) => {
             const data = fs.readFileSync(args.path).toString('base64');
             return {
                 contents: "const wasm = new WebAssembly.Module(Buffer.from(" + JSON.stringify(data) + ", 'base64')); export default wasm;",
